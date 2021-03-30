@@ -74,11 +74,11 @@ class Utils {
             // Преобразуем вход в массив захэшированных байтов
             byte[] hash = digest.digest(base.getBytes(StandardCharsets.UTF_8));
             // Подготовим буфер для будущего вывода
-            StringBuffer hexString = new StringBuffer();
+            StringBuilder hexString = new StringBuilder();
 
             // Добавляем поочередно в строку байты в HEX-формате
-            for (int i = 0; i < hash.length; i++) {
-                String hex = Integer.toHexString(0xff & hash[i]);
+            for (byte b : hash) {
+                String hex = Integer.toHexString(0xff & b);
                 if (hex.length() == 1) hexString.append('0');
                 hexString.append(hex);
             }
@@ -228,7 +228,7 @@ class Blockchain {
         System.out.println("Майним...");
 
         // Перебираем nonce, пока хэш не будет начинаться на 5 нулей
-        while (!block.computeHash().substring(0, 5).equals("00000"))
+        while (!block.computeHash().startsWith("00000"))
             // Да, вот так вот просто устроен майнинг :D
             block.data.nonce++;
 
@@ -326,7 +326,7 @@ public class Main {
     }
 }
 
-/**
+/*
 
   Поздравляю, вы дошли до конца моего проекта.
   Он еще далек до настоящей криптовалюты, так как
